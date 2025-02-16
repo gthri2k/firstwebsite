@@ -1,30 +1,82 @@
-<html>
-<head><titel>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<style type="text/css">
-body {
-	background-color: rgba(224,248,193,1);
-}
-</style>
-</titel></head>
-<body style="background-blue;"
-><h1> Hi! Welcome to my page</h1>
-<p> This is the default web page for this server</p>
-<p><em>Illusions!
-some people describe you as illusions.
-some say you remind them of magic and dreams coming true.
-and perhaps a few more, cozy and beautiful.
-i look up and realize,
-you remind me of a love i had.
-nice and subtle,
-and yet, just enough to leave it's impact.
-sure, it was short lived and fleeting
-but that's what clouds are, aren't they?
-after all, you were clouds
-but baby, i was the entire sky.
-my lips curl into a faint smile
-unbeknownst to me,
-and i continue on my way. </em>
-</p>
-<img src="images/clouds.jpg" alt="Clouds" width="560" height="420">
-</body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to My Dockerized Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            padding: 2rem;
+        }
+        .highlight {
+            background-color: #e2e6ea;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        .image-container {
+            text-align: center;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to My Dockerized Website</h1>
+    </header>
+    <main>
+        <h2>About Docker</h2>
+        <p>Docker is a platform that enables developers to build, share, and run applications in isolated environments called containers. Containers allow applications to run consistently across different environments, from development to production.</p>
+
+        <div class="image-container">
+            <img src="images/clouds.jpg" alt="Clouds" width="560" height="420">
+        </div>
+
+        <h2>Why Docker?</h2>
+        <p>Here are some key benefits of Docker:</p>
+        <ul>
+            <li>Fast deployment and scalability</li>
+            <li>Improved application portability</li>
+            <li>Efficient resource utilization</li>
+            <li>Easy integration with CI/CD pipelines</li>
+        </ul>
+
+        <h2>How This Website Works</h2>
+        <p>This website is running in a Docker container. The container was built using the following steps:</p>
+        <div class="highlight">
+            <ol>
+                <li>Created a Dockerfile to define the container image.</li>
+                <li>Built the image using <code>docker build</code>.</li>
+                <li>Pushed the image to Docker Hub.</li>
+                <li>Deployed the container on a remote server using Docker.</li>
+            </ol>
+        </div>
+
+        <h2>Try Docker Yourself!</h2>
+        <p>Want to learn more? Visit <a href="https://www.docker.com/" target="_blank">Docker's official website</a> to get started.</p>
+    </main>
+    <footer>
+        <p>Website powered by Docker</p>
+    </footer>
+</body>
+</html>
