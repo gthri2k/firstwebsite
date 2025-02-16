@@ -12,30 +12,31 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
-                // Build process (can be adjusted based on your needs)
-                bat 'dir'
+                bat 'dir' // Lists files in the workspace
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Running tests...'
-                // Add your test steps or commands here
+                // Add your test steps here
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 // Build Docker image
-                sh 'docker build -t mywebsite:latest .'
+                bat '''
+                docker build -t mywebsite:latest .
+                '''
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                // Login and push Docker image to Docker Hub
-                sh '''
-                docker login -u gthri -p Jpmc!2345
+                // Push Docker image to Docker Hub
+                bat '''
+                docker login -u <your-username> -p <your-password>
                 docker tag mywebsite:latest gthri/mywebsite:latest
                 docker push gthri/mywebsite:latest
                 '''
@@ -47,7 +48,7 @@ pipeline {
                 sshPublisher(
                     publishers: [
                         sshPublisherDesc(
-                            configName: 'MyRemoteServer', // Pre-configured in Jenkins SSH plugin
+                            configName: 'MyRemoteServer', // Pre-configured SSH server in Jenkins
                             transfers: [
                                 sshTransfer(
                                     execCommand: '''
