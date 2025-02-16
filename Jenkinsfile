@@ -58,3 +58,14 @@ stage('Build Docker Image') {
         sh 'docker build -t mywebsite:latest .'
     }
 }
+
+stage('Push Docker Image') {
+    steps {
+        sh '''
+        docker login -u gthri -p Jpmc!234
+        docker tag mywebsite:latest gthri/mywebsite:latest
+        docker push gthri/mywebsite:latest
+        '''
+    }
+}
+
