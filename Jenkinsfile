@@ -32,16 +32,19 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image') {
-            steps {
-                // Push Docker image to Docker Hub
-                bat '''
-                docker login -u gthri_2k@yahoo.com -p Jpmc!2345
-                docker tag mywebsite:latest gthri/mywebsite:latest
-                docker push gthri/mywebsite:latest
-                '''
-            }
+       stage('Push Docker Image') {
+    steps {
+        // Push Docker image to Docker Hub
+        withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+            bat '''
+            docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%
+            docker tag mywebsite:latest gthri/mywebsite:latest
+            docker push gthri/mywebsite:latest
+            '''
         }
+    }
+}
+
 
         stage('Deploy Docker Container') {
             steps {
