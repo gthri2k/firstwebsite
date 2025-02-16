@@ -4,41 +4,51 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Clone the GitHub repository
                 git branch: 'main', url: 'https://github.com/gthri2k/firstwebsite'
             }
         }
 
         stage('Build') {
             steps {
-                // Add your build step (replace 'echo' with actual commands)
                 echo 'Building the project...'
-                bat 'dir' // For Windows (lists files in the repo)
+                bat 'dir'
             }
         }
 
         stage('Test') {
             steps {
-                // Add your test commands here
                 echo 'Running tests...'
-                bat 'echo No tests defined yet.'
             }
         }
 
-        stage('Archive Artifacts') {
+        stage('Deploy') {
             steps {
-                // Archive HTML or other artifacts
-                archiveArtifacts artifacts: '*.html', allowEmptyArchive: true
+                // Use SSH to copy files to the remote server
+                sshPublisher(
+                    publishers: [
+                        sshPublisherDesc(
+                            configName: 'MyRemoteServer', // Configured in Jenkins SSH plugin
+                            transfers: [
+                                sshTransfer(
+                                    sourceFiles: '**/*', // Adjust to deploy only necessary files
+                                    remoteDirectory: '/var/www/mywebsite', // Target directory on the remote server
+                                    removePrefix: '', // Remove base path (if needed)
+                                    cleanRemote: false // Set true to clean target directory before deployment
+                                )
+                            ]
+                        )
+                    ]
+                )
             }
         }
     }
 
     post {
         success {
-            echo 'Build completed successfully!'
+            echo 'Deployment completed successfully!'
         }
         failure {
-            echo 'Build failed!'
+            echo 'Deployment failed!'
         }
     }
 }
