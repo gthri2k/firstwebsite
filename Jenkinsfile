@@ -4,6 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                // Checkout code from GitHub
                 git branch: 'main', url: 'https://github.com/gthri2k/firstwebsite'
             }
         }
@@ -11,6 +12,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the project...'
+                // Build process (can be adjusted based on your needs)
                 bat 'dir'
             }
         }
@@ -18,22 +20,42 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running tests...'
+                // Add your test steps or commands here
             }
         }
 
-        stage('Deploy') {
+        stage('Build Docker Image') {
             steps {
-                // Use SSH to copy files to the remote server
+                // Build Docker image
+                sh 'docker build -t mywebsite:latest .'
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                // Login and push Docker image to Docker Hub
+                sh '''
+                docker login -u gthri -p Jpmc!2345
+                docker tag mywebsite:latest gthri/mywebsite:latest
+                docker push gthri/mywebsite:latest
+                '''
+            }
+        }
+
+        stage('Deploy Docker Container') {
+            steps {
                 sshPublisher(
                     publishers: [
                         sshPublisherDesc(
-                            configName: 'MyRemoteServer', // Configured in Jenkins SSH plugin
+                            configName: 'MyRemoteServer', // Pre-configured in Jenkins SSH plugin
                             transfers: [
                                 sshTransfer(
-                                    sourceFiles: '**/*', // Adjust to deploy only necessary files
-                                    remoteDirectory: '/var/www/mywebsite', // Target directory on the remote server
-                                    removePrefix: '', // Remove base path (if needed)
-                                    cleanRemote: false // Set true to clean target directory before deployment
+                                    execCommand: '''
+                                    docker pull gthri/mywebsite:latest
+                                    docker stop mywebsite || true
+                                    docker rm mywebsite || true
+                                    docker run -d -p 80:80 --name mywebsite gthri/mywebsite:latest
+                                    '''
                                 )
                             ]
                         )
@@ -45,27 +67,10 @@ pipeline {
 
     post {
         success {
-            echo 'Deployment completed successfully!'
+            echo 'Pipeline executed successfully! Deployment completed!'
         }
         failure {
-            echo 'Deployment failed!'
+            echo 'Pipeline failed. Please check the logs.'
         }
     }
 }
-
-stage('Build Docker Image') {
-    steps {
-        sh 'docker build -t mywebsite:latest .'
-    }
-}
-
-stage('Push Docker Image') {
-    steps {
-        sh '''
-        docker login -u gthri -p Jpmc!234
-        docker tag mywebsite:latest gthri/mywebsite:latest
-        docker push gthri/mywebsite:latest
-        '''
-    }
-}
-
