@@ -36,7 +36,7 @@ pipeline {
             steps {
                 // Push Docker image to Docker Hub
                 bat '''
-                docker login -u <your-username> -p <your-password>
+                docker login -u gthri_2k@yahoo.com -p Jpmc!2345
                 docker tag mywebsite:latest gthri/mywebsite:latest
                 docker push gthri/mywebsite:latest
                 '''
